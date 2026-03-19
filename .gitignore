@@ -5,3 +5,4 @@
 *.tfplan
 tfplan*
 crash.log
+CLAUDE.local.md
