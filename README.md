@@ -92,7 +92,7 @@ Notable features:
 - Provides fine-grained controls to exclude specific usage data categories from sharing:
   - `--cloud-assets=false`
   - `--recommender=false`
-  - Run with the `--help` flag to see the full list of controls.
+  - ... and more ..
 
 ---
 
@@ -107,7 +107,11 @@ For all available options:
 ```
 
 ---
-The **default settings** set the permissions exactly as documented in the [Access Requirements](#access-requirements) section.
+The **default settings** set the permissions exactly as documented in the [Access Requirements](#access-requirements) section. The **scope** is organisation. If you want to scope the deployment to a folder or to a project, FIXME soemthing
+
+
+- Only organization-scoped onboarding supports the full default configuration.
+- Folder-scoped and project-scoped onboarding require disabling organization-only viewer roles.
 
 To onboard with **default settings**:
 
@@ -122,11 +126,11 @@ To onboard with **default settings**:
 
 Where the following placeholders must be replaced with your own:
 
-| Value | Description |
-|---|---|
-| `SERVICE_ACCOUNT_EMAIL` | Your unique **service account email** as provided by us. |
-| `BILLING_ACCOUNT_ID` | **[billing account] ID** |
-| `ORG_ID` | **[organization] ID** |
+| Value                   | Description                                                 |
+|-------------------------|-------------------------------------------------------------|
+| `SERVICE_ACCOUNT_EMAIL` | Your unique **service account email** as provided by us.    |
+| `BILLING_ACCOUNT_ID`    | **[billing account] ID**                                    |
+| `ORG_ID`                | **[organization] ID**                                       |
 
 You must also specify an existing BigQuery dataset that contains **detailed usage** [Cloud Billing data export](https://docs.cloud.google.com/billing/docs/how-to/export-data-bigquery). 
 
@@ -165,37 +169,12 @@ Note: to disable BigQuery metadata export,
 [organization]: https://docs.cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#organizations
 [project]: https://docs.cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects
 
-#### Notes
-
-- Only organization-scoped onboarding supports the full default configuration.
-- Folder-scoped and project-scoped onboarding require disabling organization-only viewer roles.
-
-
+---
 
 <!--  TODO document this in roles list:
 
 - the shell helper grants dataset-level `roles/bigquery.dataViewer` for billing export datasets and project-level `roles/bigquery.jobUser` for query execution
 -->
-
-#### Domain restricted sharing
-
-> [!WARNING]
-> If [domain-restricted sharing] is active on your organisation, you might need to adjust it first.
-
-
-If the policy is enforced with the `constraints/iam.allowedPolicyMemberDomains` legacy managed constraint, you can run the following command to print the required organization principal set:
-
-```bash
-./scripts/customer_onboard_service_account.sh --show-allowed-policy-member-domain-values
-```
-
-Then allow the returned organization principal-set value and, where applicable, the returned directory customer ID value.
-
-If the policy is enforced by some other method, check the [docs] on how to adjust it, or contact us for assistance.
-
-[domain-restricted sharing]: https://docs.cloud.google.com/organization-policy/domain-restricted-sharing
-[docs]: https://docs.cloud.google.com/organization-policy/domain-restricted-sharing
-
 
 ### Option 2: use our Terraform module
 
@@ -241,6 +220,25 @@ Billing export datasets are not optional. EntropyFabric needs direct read access
 BigQuery is location-sensitive. The dataset `location` must be captured explicitly so **Entropy Fabric** can run billing and metadata queries in the correct region or multi-region.
 
 See [`terraform/README.md`](./terraform/README.md) for the Terraform-specific workflow and example configuration.
+
+## Domain restricted sharing
+
+> [!WARNING]
+> If [domain-restricted sharing] is active on your organisation, you might need to adjust it first.
+
+
+If the policy is enforced with the `constraints/iam.allowedPolicyMemberDomains` legacy managed constraint, you can run the following command to print the required organization principal set:
+
+```bash
+./scripts/customer_onboard_service_account.sh --show-allowed-policy-member-domain-values
+```
+
+Then allow the returned organization principal-set value and, where applicable, the returned directory customer ID value.
+
+If the policy is enforced by some other method, check the [docs] on how to adjust it, or contact us for assistance.
+
+[domain-restricted sharing]: https://docs.cloud.google.com/organization-policy/domain-restricted-sharing
+[docs]: https://docs.cloud.google.com/organization-policy/domain-restricted-sharing
 
 ## Offboarding
 
