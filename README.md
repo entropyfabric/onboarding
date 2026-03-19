@@ -8,17 +8,11 @@ This public repository contains onboarding instructions and tools for **Entropy 
 
 This is achieved by leveraging advanced AI models as well as human expert analysis and judgement.
 
-## Getting started
+## Access requirements
 
 **Entropy Fabric** requires *read-only* access to certain Google Cloud usage data. This access is granted through predefined IAM roles assigned to a dedicated service account unique to your organization.
 
-The next section describes these access requirements in full for transparency.
-
-Because managing this access manually can be cumbersome, we provide automation to simplify the setup.
-
-The sections that follow describe the two automation options available for granting this access.
-
-### Access requirements
+This section describes these access requirements in full for transparency.
 
 The permissions granted by the following roles are intentionally limited to what **Entropy Fabric** needs to deliver strong resource coverage and high-quality insights from day one. The main trade-off is access to BigQuery *job metadata*, which customers should review carefully, as it may include query text and employee email addresses. 
 
@@ -46,7 +40,7 @@ The permissions granted by the following roles are intentionally limited to what
 
 --->
 
-#### **Organization** roles
+### **Organization** roles
 
 - `roles/aiplatform.viewer`
 - `roles/bigquery.metadataViewer`
@@ -64,31 +58,25 @@ The permissions granted by the following roles are intentionally limited to what
 - `roles/serviceusage.serviceUsageConsumer`
 - `roles/storage.bucketViewer`
 
-#### **Billing account** roles
+### **Billing account** roles
 
 - `roles/billing.viewer`
 
-#### **Billing export dataset** roles
+### **Billing export dataset** roles
 
 - `roles/bigquery.dataViewer`
 
-#### **Runner project** roles
+### **Runner project** roles
 
 - `roles/bigquery.jobUser`
 
-#### **Rationale**
-
-Some further notes on individual roles:
+### Notes on individual roles
 
 * The basic **Brower** role (`roles/browser`) provides read access to discover the project hierarchy, including the folder, organization, and IAM allow policy resources. This role doesn't include permission to view resources in the project.
 
-<!-- 
-A more limited predefined **Organization Viewer** role (`roles/resourcemanager.organizationViewer`) would not be sufficient for discovery because it only grants organization lookup, not project and resource hierarchy discovery.
--->
-
 * The **Kubernetes Engine Viewer** role (`roles/container.viewer`) can be used to extend the analysis to cover the configuration of Kubernetes workloads, namespaces, CRDs, and many custom resources such as `ComputeClass`. This role does not expose Kubernetes secrets.
 
-### How to grant access
+## How to grant access
 
 For customer convenience, we provide two different automated approaches to managing our access to your Cloud usage data. 
 
@@ -185,6 +173,7 @@ If the policy is enforced by some other method, check the [docs] on how to adjus
 [domain-restricted sharing]: https://docs.cloud.google.com/organization-policy/domain-restricted-sharing
 [docs]: https://docs.cloud.google.com/organization-policy/domain-restricted-sharing
 
+
 ### Option 2: use our Terraform module
 
 This option provides a Terraform module:
@@ -230,12 +219,14 @@ BigQuery is location-sensitive. The dataset `location` must be captured explicit
 
 See [`terraform/README.md`](./terraform/README.md) for the Terraform-specific workflow and example configuration.
 
+
 ## Offboarding
 
 You can stop sharing your Google Cloud usage data with us at any time. The process depends on how you onboarded.
 
 - If you used Terraform, run `terraform destroy` to revoke access.
 - If you used the shell script, contact us for assistance.
+
 
 ## Troubleshooting
 
