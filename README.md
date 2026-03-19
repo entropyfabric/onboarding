@@ -18,11 +18,6 @@ These IAM roles grant permissions to *read* information about your resources but
 
 The following IAM roles are granted *by default*, organized by resource scope. These roles deliver comprehensive resource coverage and high-quality insights while following the principle of least privilege.
 
-<!--
-> [!IMPORTANT]
-> BigQuery job metadata access is enabled by default but this can be overridden. This metadata may include SQL query text and employee email addresses.
--->
-
 ### **Organization** roles
 
 The following IAM roles are granted *by default* at the organisation level.
@@ -87,18 +82,34 @@ Grant the required IAM roles using any method, or use our automated tools for co
 
 ### Option 1: use our shell script
 
-This option provides a `bash` shell script which makes use of Google Cloud CLI (`gcloud`): 
+Our `bash` [shell script](./scripts/customer_onboard_service_account.sh) leverages a mature Google Cloud CLI tool (`gcloud`).
 
-[`customer_onboard_service_account.sh`](./scripts/customer_onboard_service_account.sh)
+Notable features:
 
-Pick this option if you want to:
+- Can grant access at organisation (default), folder, or project level.
+- Can check existing IAM bindings and print a summary (`--validate`).
+- Can generate commands you can run to create the missing bindings (`--dry-run`).
+- Provides fine-grained controls to exclude specific usage data categories from sharing:
+  - `--cloud-assets=false`
+  - `--recommender=false`
+  - Run with the `--help` flag to see the full list of controls.
 
-- Assess readiness without changing IAM policies by using the `--validate` flag.
-- Preview missing grants with the `--dry-run` flag.
-- Exclude specific categories of Google Cloud usage data from sharing with flags such as `--monitoring=false` and `--bigquery-jobs=false`.
-- Limit access to the organization, folder, or project level.
+---
 
-Run the following command to onboard with the default configuration:
+Before you begin, make sure you have [Google Cloud CLI](https://docs.cloud.google.com/sdk/docs/install-sdk) installed and configured.
+
+---
+
+For all available options:
+
+```bash
+./scripts/customer_onboard_service_account.sh --help
+```
+
+---
+The **default settings** set the permissions exactly as documented in the [Access Requirements](#access-requirements) section.
+
+To onboard with **default settings**:
 
 ```bash
 ./scripts/customer_onboard_service_account.sh \
@@ -113,23 +124,42 @@ Where the following placeholders must be replaced with your own:
 
 | Value | Description |
 |---|---|
-| `SERVICE_ACCOUNT_EMAIL` | **Entropy Fabric** service account email to grant access to |
-| `BILLING_ACCOUNT_ID` | [billing account] ID in `000000-000000-000000` format |
-| `ORG_ID` | [organization] ID |
-| `BILLING_PROJECT_ID` | [project] ID where *Cloud Billing export* to BigQuery was set up  |
-| `BILLING_DATASET_ID` | *Cloud Billing export* BigQuery dataset name |
-| `BILLING_LOCATION` | *Cloud Billing export* BigQuery dataset location |
-| `RUNNER_PROJECT_ID` | project ID to run BigQuery metadata export jobs |
+| `SERVICE_ACCOUNT_EMAIL` | Your unique **service account email** as provided by us. |
+| `BILLING_ACCOUNT_ID` | **[billing account] ID** |
+| `ORG_ID` | **[organization] ID** |
 
-<!-- 
-- `SERVICE_ACCOUNT_EMAIL`
-- `BILLING_ACCOUNT_ID`
-- `ORG_ID`
-- `BILLING_PROJECT_ID`
-- `BILLING_DATASET_ID`
-- `BILLING_LOCATION`
-- `RUNNER_PROJECT_ID`
--->
+You must also specify an existing BigQuery dataset that contains **detailed usage** [Cloud Billing data export](https://docs.cloud.google.com/billing/docs/how-to/export-data-bigquery). 
+
+FIXME The dataset location must match the dataset's actual BigQuery location.
+
+The following placeholders must be replaced with your own:
+
+| Value                | Description                          |
+|----------------------|--------------------------------------|
+| `BILLING_PROJECT_ID` | **[project] ID** hosting the dataset |
+| `BILLING_DATASET_ID` | dataset name                         |
+| `BILLING_LOCATION`   | dataset location                     |
+
+Use additional `--billing-export-dataset` options if your Cloud Billing data export is in multiple datasets.
+
+Also use additional `--billing-export-dataset` options to grant access to any relevant datasets that store usage or monitoring data.
+
+Finally, with **default settings** you must also specify at least one project from which to export the BigQuery metadata for deep analysis:
+
+| Value               | Description                                           |
+|---------------------|-------------------------------------------------------|
+| `RUNNER_PROJECT_ID` | **[project] ID** to run BigQuery metadata export jobs |
+
+Use additional `--bigquery-job-user-project` options to export the metadata from more than one project.
+
+Note: to disable BigQuery metadata export, 
+
+- Set *all* of: 
+  - `--bigquery-metadata=false`
+  - `--bigquery-jobs=false`
+- Don't set *any* of:
+  - `--bigquery-job-user-project`
+
 
 [billing account]: https://docs.cloud.google.com/billing/docs/how-to/find-billing-account-id
 [organization]: https://docs.cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#organizations
@@ -140,17 +170,7 @@ Where the following placeholders must be replaced with your own:
 - Only organization-scoped onboarding supports the full default configuration.
 - Folder-scoped and project-scoped onboarding require disabling organization-only viewer roles.
 
----
 
-At least one `--billing-export-dataset` argument is required. Multiple datasets are supported, each requiring its own `--billing-export-dataset` argument.
-
-The dataset location must match the dataset's actual BigQuery location.
-
----
-
-The IAM roles to grant access to BigQuery metadata are enabled by default, so at least one `--bigquery-job-user-project` argument is required.
-
-To avoid having to provide the argument, turn off BigQuery metadata access with *both* `--bigquery-metadata=false` *and* `--bigquery-jobs=false`.
 
 <!--  TODO document this in roles list:
 
