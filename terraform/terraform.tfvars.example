@@ -1,0 +1,43 @@
+service_account_email = "onboarding-reader@entropyfabric-prod.iam.gserviceaccount.com"
+billing_account_id    = "012345-6789AB-CDEF01"
+organization_id       = "123456789012"
+
+additional_bigquery_job_user_project_ids = [
+  "entropyfabric-runner",
+]
+
+billing_export_datasets = [
+  {
+    project_id = "sample-billing-prod"
+    dataset_id = "billing_export"
+    location   = "europe-west2"
+  }
+]
+
+bigquery_read_datasets = [
+  {
+    project_id = "sample-gke-prod"
+    dataset_id = "gke_usage_metering"
+    location   = "europe-west2"
+  },
+  {
+    project_id = "sample-finops-prod"
+    dataset_id = "org_recommender_export"
+    location   = "US"
+  }
+]
+
+enable_cloud_assets          = true
+enable_recommender           = true
+enable_monitoring            = true
+enable_compute               = true
+# Keep this enabled to inspect live GKE objects such as workloads, CRDs, and ComputeClass resources.
+enable_containers            = true
+enable_cloudsql              = true
+enable_cloudrun              = true
+enable_tags                  = true
+enable_pubsub                = true
+enable_storage               = true
+enable_vertex_ai             = true
+enable_bigquery_metadata     = true
+enable_bigquery_job_metadata = true
