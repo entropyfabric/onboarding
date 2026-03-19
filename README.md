@@ -1,86 +1,89 @@
 # Customer Onboarding to **Entropy Fabric**
 
-This public repository contains onboarding instructions and tools for **Entropy Fabric** customers.
+This repository contains onboarding resources for **Entropy Fabric** customers:
 
-## About
+- Access requirements
+- Onboarding instructions
+- IAM configuration automation
 
-**Entropy Fabric** provides bespoke and actionable cost savings insights for your Google Cloud resources. 
+## **Entropy Fabric**
 
-This is achieved by leveraging advanced AI models as well as human expert analysis and judgement.
+**Entropy Fabric** is our Google Cloud cost optimization platform, delivering actionable savings insights through AI-powered analysis validated by our team of cloud experts.
 
 ## Access requirements
 
-**Entropy Fabric** requires *read-only* access to certain Google Cloud usage data. This access is granted through predefined IAM roles assigned to a dedicated service account unique to your organization.
+**Entropy Fabric** requires access to certain Google Cloud usage data. You control this access by granting IAM roles to a *dedicated* service account *unique* to your organization.
 
-This section describes these access requirements in full for transparency.
+These IAM roles grant permissions to *read* information about your resources but not to modify or delete them.
 
-The permissions granted by the following roles are intentionally limited to what **Entropy Fabric** needs to deliver strong resource coverage and high-quality insights from day one. The main trade-off is access to BigQuery *job metadata*, which customers should review carefully, as it may include query text and employee email addresses. 
-
-*By default*, the followined predefined IAM roles are granted:
+The following IAM roles are granted *by default*, organized by resource scope. These roles deliver comprehensive resource coverage and high-quality insights while following the principle of least privilege.
 
 <!--
-- `roles/billing.viewer`
-- `roles/browser`
-- `roles/cloudasset.viewer`
-- `roles/serviceusage.serviceUsageConsumer`
-- `roles/recommender.viewer`
-- `roles/monitoring.viewer`
-- `roles/compute.viewer`
-- `roles/container.viewer`
-- `roles/cloudsql.viewer`
-- `roles/run.viewer`
-- `roles/resourcemanager.tagViewer`
-- `roles/pubsub.viewer`
-- `roles/storage.bucketViewer`
-- `roles/aiplatform.viewer`
-- `roles/bigquery.metadataViewer`
-- `roles/bigquery.resourceViewer`
-- `roles/bigquery.dataViewer` on one or more billing export datasets
-- `roles/bigquery.jobUser` on one or more runner projects
-
---->
+> [!IMPORTANT]
+> BigQuery job metadata access is enabled by default but this can be overridden. This metadata may include SQL query text and employee email addresses.
+-->
 
 ### **Organization** roles
 
-- `roles/aiplatform.viewer`
-- `roles/bigquery.metadataViewer`
-- `roles/bigquery.resourceViewer`
-- `roles/browser`
-- `roles/cloudasset.viewer`
-- `roles/cloudsql.viewer`
-- `roles/compute.viewer`
-- `roles/container.viewer`
-- `roles/monitoring.viewer`
-- `roles/pubsub.viewer`
-- `roles/recommender.viewer`
-- `roles/resourcemanager.tagViewer`
-- `roles/run.viewer`
-- `roles/serviceusage.serviceUsageConsumer`
-- `roles/storage.bucketViewer`
+The following IAM roles are granted *by default* at the organisation level.
+
+- `roles/aiplatform.viewer`<sup>†</sup>
+- **`roles/bigquery.metadataViewer`**<sup>† ‡</sup>
+- `roles/bigquery.resourceViewer`<sup>† ‡</sup>
+- **`roles/browser`**
+- `roles/cloudasset.viewer`<sup>†</sup>
+- `roles/cloudsql.viewer`<sup>†</sup>
+- `roles/compute.viewer`<sup>†</sup>
+- `roles/container.viewer`<sup>†</sup>
+- `roles/monitoring.viewer`<sup>†</sup>
+- `roles/pubsub.viewer`<sup>†</sup>
+- `roles/recommender.viewer`<sup>†</sup>
+- `roles/resourcemanager.tagViewer`<sup>†</sup>
+- `roles/run.viewer`<sup>†</sup>
+- **`roles/serviceusage.serviceUsageConsumer`**<sup>†</sup>
+- `roles/storage.bucketViewer`<sup>†</sup>
+
+<sup>†</sup> **Optional**, can be disabled during onboarding.
+
+<sup>‡</sup> **BigQuery metadata** accessible through these roles may contain *query text* and *employee email addresses*; however, these roles *do not provide access* to dataset content or query results.
+
+---
+
+The **Browser** role (`roles/browser`) provides read access to discover the resource hierarchy (projects, folders, organization, and IAM policies) but does not grant permissions to view resources within projects.
+
+The **Kubernetes Engine Viewer** role (`roles/container.viewer`) provides read access to the configuration of Kubernetes workloads, namespaces, CRDs, and custom resources such as `ComputeClass`. This role does not expose Kubernetes Secrets.
 
 ### **Billing account** roles
 
+The following IAM roles are granted on each billing account you specify:
+
 - `roles/billing.viewer`
 
+<!-- 
 ### **Billing export dataset** roles
+-->
+
+### **BigQuery dataset** roles
+
+The following IAM roles are granted on each BigQuery dataset you specify:
 
 - `roles/bigquery.dataViewer`
 
-### **Runner project** roles
+Only grant this role on datasets containing Cloud Billing data exports or other relevant billing or monitoring data.
 
-- `roles/bigquery.jobUser`
+### **Project** roles
 
-### Notes on individual roles
+The following IAM roles are granted on each **runner project** you specify:
 
-* The basic **Brower** role (`roles/browser`) provides read access to discover the project hierarchy, including the folder, organization, and IAM allow policy resources. This role doesn't include permission to view resources in the project.
+- `roles/bigquery.jobUser`<sup>†</sup>
 
-* The **Kubernetes Engine Viewer** role (`roles/container.viewer`) can be used to extend the analysis to cover the configuration of Kubernetes workloads, namespaces, CRDs, and many custom resources such as `ComputeClass`. This role does not expose Kubernetes secrets.
+<sup>†</sup> **Optional**, can be disabled during onboarding.
+
+You only need a runner project if you granted either of the two **BigQuery metadata** roles explained in the [**Organization** roles](#organization-roles) section.
 
 ## How to grant access
 
-For customer convenience, we provide two different automated approaches to managing our access to your Cloud usage data. 
-
-Both options grants the *same* IAM roles by default.
+Grant the required IAM roles using any method, or use our automated tools for convenience. All our tools apply the same defaults and allow fine-grained customization.
 
 ### Option 1: use our shell script
 
@@ -219,7 +222,6 @@ BigQuery is location-sensitive. The dataset `location` must be captured explicit
 
 See [`terraform/README.md`](./terraform/README.md) for the Terraform-specific workflow and example configuration.
 
-
 ## Offboarding
 
 You can stop sharing your Google Cloud usage data with us at any time. The process depends on how you onboarded.
@@ -227,7 +229,10 @@ You can stop sharing your Google Cloud usage data with us at any time. The proce
 - If you used Terraform, run `terraform destroy` to revoke access.
 - If you used the shell script, contact us for assistance.
 
-
 ## Troubleshooting
 
 We are very happy to help you with any potential issues. Just let us know!
+
+## License
+
+Copyright © 2026 Devil Mice Labs. All rights reserved.
