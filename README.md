@@ -200,12 +200,6 @@ Important notes:
 - `billing_export_datasets` is mandatory and every dataset entry must include `project_id`, `dataset_id`, and `location`
 - `bigquery_read_datasets` is optional, but every dataset entry must include `project_id`, `dataset_id`, and `location`
 
-> [!WARNING]
-> This Terraform module is not intended for use from another Terraform module.
->
-> If you need to call it from another module, first delete the `providers.tf` file.
->
-> For more information, see [Providers Within Modules](https://developer.hashicorp.com/terraform/language/modules/develop/providers) or contact us.
 
 ## Billing Export Datasets
 
