@@ -127,7 +127,7 @@ To onboard with **default settings**:
 Where the following placeholders must be replaced with your own:
 
 | Value                   | Description                                                 |
-|-------------------------|-------------------------------------------------------------|
+| :---------------------- | :---------------------------------------------------------- |
 | `SERVICE_ACCOUNT_EMAIL` | The unique **service account email** we provide.            |
 | `BILLING_ACCOUNT_ID`    | **[Billing account] ID**                                    |
 | `ORG_ID`                | **[Organization] ID**                                       |
@@ -139,7 +139,7 @@ FIXME The dataset location must match the dataset's actual BigQuery location.
 The following placeholders must be replaced with your own:
 
 | Value                | Description                          |
-|----------------------|--------------------------------------|
+| :------------------- | :----------------------------------- |
 | `BILLING_PROJECT_ID` | **[Project] ID** hosting the dataset |
 | `BILLING_DATASET_ID` | Dataset name                         |
 | `BILLING_LOCATION`   | Dataset location                     |
@@ -151,7 +151,7 @@ Also use additional `--billing-export-dataset` options to grant access to any re
 Finally, with **default settings** you must also specify at least one project from which to export the BigQuery metadata for deep analysis:
 
 | Value               | Description                                           |
-|---------------------|-------------------------------------------------------|
+| :------------------ | :---------------------------------------------------- |
 | `RUNNER_PROJECT_ID` | **[Project] ID** to run BigQuery metadata export jobs |
 
 Use additional `--bigquery-job-user-project` options to export the metadata from more than one project.
