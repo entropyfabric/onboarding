@@ -117,20 +117,20 @@ To onboard with **default settings**:
 
 ```bash
 ./scripts/customer_onboard_service_account.sh \
-  --service-account-email SERVICE_ACCOUNT_EMAIL \
-  --billing-account BILLING_ACCOUNT_ID \
-  --organization ORG_ID \
-  --billing-export-dataset BILLING_PROJECT_ID:BILLING_DATASET_ID:BILLING_LOCATION \
-  --bigquery-job-user-project RUNNER_PROJECT_ID
+  --service-account-email $SERVICE_ACCOUNT_EMAIL \
+  --billing-account $BILLING_ACCOUNT_ID \
+  --organization $ORG_ID \
+  --billing-export-dataset "$BILLING_PROJECT_ID:$BILLING_DATASET_ID:$BILLING_LOCATION" \
+  --bigquery-job-user-project $RUNNER_PROJECT_ID
 ```
 
 Where the following placeholders must be replaced with your own:
 
 | Value                   | Description                                                 |
 |-------------------------|-------------------------------------------------------------|
-| `SERVICE_ACCOUNT_EMAIL` | Your unique **service account email** as provided by us.    |
-| `BILLING_ACCOUNT_ID`    | **[billing account] ID**                                    |
-| `ORG_ID`                | **[organization] ID**                                       |
+| `SERVICE_ACCOUNT_EMAIL` | The unique **service account email** we provide.            |
+| `BILLING_ACCOUNT_ID`    | **[Billing account] ID**                                    |
+| `ORG_ID`                | **[Organization] ID**                                       |
 
 You must also specify an existing BigQuery dataset that contains **detailed usage** [Cloud Billing data export](https://docs.cloud.google.com/billing/docs/how-to/export-data-bigquery). 
 
@@ -140,9 +140,9 @@ The following placeholders must be replaced with your own:
 
 | Value                | Description                          |
 |----------------------|--------------------------------------|
-| `BILLING_PROJECT_ID` | **[project] ID** hosting the dataset |
-| `BILLING_DATASET_ID` | dataset name                         |
-| `BILLING_LOCATION`   | dataset location                     |
+| `BILLING_PROJECT_ID` | **[Project] ID** hosting the dataset |
+| `BILLING_DATASET_ID` | Dataset name                         |
+| `BILLING_LOCATION`   | Dataset location                     |
 
 Use additional `--billing-export-dataset` options if your Cloud Billing data export is in multiple datasets.
 
@@ -152,7 +152,7 @@ Finally, with **default settings** you must also specify at least one project fr
 
 | Value               | Description                                           |
 |---------------------|-------------------------------------------------------|
-| `RUNNER_PROJECT_ID` | **[project] ID** to run BigQuery metadata export jobs |
+| `RUNNER_PROJECT_ID` | **[Project] ID** to run BigQuery metadata export jobs |
 
 Use additional `--bigquery-job-user-project` options to export the metadata from more than one project.
 
