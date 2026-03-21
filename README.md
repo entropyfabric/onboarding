@@ -54,10 +54,6 @@ The following IAM roles are granted on each billing account you specify:
 
 - `roles/billing.viewer`
 
-<!-- 
-### **Billing export dataset** roles
--->
-
 ### **BigQuery dataset** roles
 
 The following IAM roles are granted on each BigQuery dataset you specify:
