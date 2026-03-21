@@ -130,8 +130,6 @@ Where the following placeholders must be replaced with your own:
 
 You must also specify an existing BigQuery dataset that contains **detailed usage** [Cloud Billing data export](https://docs.cloud.google.com/billing/docs/how-to/export-data-bigquery). 
 
-FIXME The dataset location must match the dataset's actual BigQuery location.
-
 The following placeholders must be replaced with your own:
 
 | Value                | Description                          |
